@@ -1,0 +1,6 @@
+@here_to_slay_HostAddress = http://localhost:5262
+
+GET {{here_to_slay_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

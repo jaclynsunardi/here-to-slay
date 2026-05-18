@@ -1,0 +1,19 @@
+# C# / ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Vite / React
+node_modules/
+dist/
+.env
+.env.local
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
