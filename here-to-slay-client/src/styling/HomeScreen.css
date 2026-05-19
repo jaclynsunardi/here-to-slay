@@ -6,7 +6,7 @@
   justify-content: center;
   height: 100vh;
   gap: 2rem;
-  background-color:#241010;
+  background-color: #241010;
 }
 
 .title {
@@ -21,41 +21,70 @@
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 500px; /* resize as needed */
+  width: 500px;
 }
 
-.side-image-left, .side-image-right {
+.side-image-left,
+.side-image-right {
   position: absolute;
   top: 0;
   width: 520px;
   height: 100vh;
   overflow: hidden;
-  
 }
 
+/* LEFT SIDE */
 .side-image-left {
   left: 0;
 }
 
+.side-image-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+}
+
+/* RIGHT SIDE */
 .side-image-right {
   right: 0;
 }
 
-.side-image-left img, .side-image-right img {
+.side-image-right img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.side-image-left img {
-  object-position: left center;
-}
-
-.side-image-right img {
   object-position: right center;
 }
 
 
+.side-image-left::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to right,
+    rgba(36, 16, 16, 0) 50%,
+    rgba(36, 16, 16, 1) 100%
+  );
+}
+
+.side-image-right::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to left,
+    rgba(36, 16, 16, 0) 50%,
+    rgba(36, 16, 16, 1) 100%
+  );
+}
+
+/* BUTTONS */
 .buttons {
   display: flex;
   flex-direction: column;
@@ -91,4 +120,92 @@
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(4px);
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 1200px) {
+  .side-image-left,
+  .side-image-right {
+    width: 300px;
+  }
+
+  .logo {
+    width: 380px;
+  }
+
+  .buttons {
+    width: 220px;
+  }
+}
+
+@media (max-width: 900px) {
+  .side-image-left,
+  .side-image-right {
+    width: 220px;
+  }
+
+  .logo {
+    width: 300px;
+  }
+
+  .buttons {
+    width: 200px;
+  }
+
+  .btn {
+    font-size: 1rem;
+    padding: 0.8rem 1.6rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .side-image-left,
+  .side-image-right {
+    width: 140px;
+  }
+
+  .logo {
+    width: 240px;
+    top: 30px;
+  }
+
+  .buttons {
+    width: 180px;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+    padding: 0.75rem 1.4rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .side-image-left,
+  .side-image-right {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .logo {
+    width: 180px;
+    top: 20px;
+  }
+
+  .buttons {
+    width: 160px;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
 }
