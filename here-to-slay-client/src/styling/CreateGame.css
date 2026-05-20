@@ -1,0 +1,32 @@
+.create-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+  background-color: #241010;
+  color: white;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.go-back-button {
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s;
+}
+
+.go-back-button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.go-back-button:active {
+  transform: scale(0.98);
+}

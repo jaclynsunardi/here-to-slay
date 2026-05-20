@@ -1,0 +1,61 @@
+.game-setting-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.game-setting-container h2 {
+  font-size: 2rem;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  margin: 0;
+}
+
+.setting-box {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 400px;
+  max-width: 90vw;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.setting-item label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+}
+
+.setting-item label:first-child {
+  margin-top: 0;
+}
+
+.setting-dropbox,
+.setting-input {
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.setting-dropbox:focus,
+.setting-input:focus {
+  outline: none;
+  border-color: #7c3aed;
+}
+
+.setting-dropbox option {
+  background-color: #241010;
+  color: white;
+}

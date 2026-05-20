@@ -1,6 +1,14 @@
+import {useState} from "react";
 import '../styling/HomeScreen.css';
+import CreateGame from './CreateGame.tsx';
 
 function HomeScreen() {
+  
+  const [showCreateGame, setShowCreateGame] = useState(false);
+
+  if (showCreateGame) {
+    return <CreateGame />;
+  }
 
   return (
     <div className="home-container">
@@ -8,7 +16,7 @@ function HomeScreen() {
             <img src="/images/edited/logo.png" className="logo" />
         </div>
         <div className='buttons'>
-            <button className="btn btn-primary">Create Game</button>
+            <button className="btn btn-primary" onClick={() => setShowCreateGame(true)}>Create Game</button>
             <button className='btn btn-secondary'>Join Game</button>
         </div>
         <div className='side-image-left'>
