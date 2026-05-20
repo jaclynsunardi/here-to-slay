@@ -1,3 +1,5 @@
+using HereToSlay.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,11 +16,32 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddSingleton<Dictionary<string, Game>>();
+
 var app = builder.Build();
 
 app.UseCors();
 app.UseHttpsRedirection();
 
-app.MapGet("/ping", () => "pong");
+app.MapPost("/game/create", (CreateGameRequest request, Dictionary<string, Game> games) =>
+{
+    var host = new Player
+    {
+        Id = Guid.NewGuid().ToString(),
+        Name = request.HostName,
+        Type= PlayerType.Host
+    };
+
+    var game = new Game
+    {
+        RoomCode = request.RoomCode,
+        Players = new List<Player> {host},
+        State = GameState.Waiting
+    };
+
+    games[game.RoomCode] = game;
+
+    return Results.Ok(game);
+});
 
 app.Run();

@@ -59,3 +59,20 @@
   background-color: #241010;
   color: white;
 }
+
+.btn-create {
+  margin-top: 1rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+  background-color: #7c3aed;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s;
+}
+
+.btn-create:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
