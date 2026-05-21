@@ -1,0 +1,113 @@
+.lobby-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #241010;
+    color: white;
+}
+
+.lobby-card {
+    width: 500px;
+    padding: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+}
+
+.lobby-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.room-code-box {
+    margin-bottom: 2rem;
+}
+
+.room-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 2px;
+}
+
+.room-code {
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 6px;
+    padding: 15px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.players-section h2 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.players-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.player-card {
+    padding: 0.8rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.player-card.joined {
+    background: rgba(124, 58, 237, 0.2);
+    border: 1px solid rgba(124, 58, 237, 0.5);
+}
+
+.player-card.waiting {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.lobby-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.btn-copy,
+.btn-start {
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+.btn-copy {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-start {
+    background-color: #7c3aed;
+    color: white;
+}
+
+.btn-copy:hover,
+.btn-start:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.btn-copy:active,
+.btn-start:active {
+    transform: scale(0.98);
+}

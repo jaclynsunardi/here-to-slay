@@ -39,6 +39,7 @@ function GameSetting() {
 
         const game = await response.json();
         console.log("Game created:", game);
+        navigate(`/lobby/${roomCode}`);
     };
     
     return (
@@ -70,7 +71,7 @@ function GameSetting() {
                         <option value="public">Public</option>
                         <option value="private">Private</option>
                     </select>
-                    <button className="btn-create" onClick={() => navigate(`/lobby/${roomCode}`)}>Create Game</button>
+                    <button className="btn-create" onClick={handleCreate}>Create Game</button>
                 </div>
             </div>
         </div>
