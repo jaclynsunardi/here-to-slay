@@ -1,15 +1,29 @@
 import {useState} from "react";
+import {useNavigate} from 'react-router-dom';
 import "../styling/GameSetting.css";
 
 const BACKEND_URL = "http://localhost:5262";
+const roomCodeLength = 6;
+
+function generateRoomCode() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+
+    for (let i = 0; i < roomCodeLength; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    return code;
+};
 
 function GameSetting() {
 
+    const navigate = useNavigate();
+
     const [gameType, setGameType] = useState("classic");
     const [numPlayers, setNumPlayers] = useState(2);
-    const [roomCode, setRoomCode] = useState("");
+    const [roomCode, setRoomCode] = useState(generateRoomCode());
     const [lobbyVisibility, setLobbyVisibility] = useState("public");
-    const [invitedPlayers, setInvitedPlayers] = useState("");
 
     const handleCreate = async () => {
         const response = await fetch(`${BACKEND_URL}/game/create`, {
@@ -56,9 +70,7 @@ function GameSetting() {
                         <option value="public">Public</option>
                         <option value="private">Private</option>
                     </select>
-                    <label htmlFor="invitedPlayers">Invited Players:</label>
-                    <input type="text" id="invitedPlayers" name="invitedPlayers" className="setting-input" value={invitedPlayers} onChange={(e) => setInvitedPlayers(e.target.value)}/>
-                    <button className="btn-create" onClick={handleCreate}>Create Game</button>
+                    <button className="btn-create" onClick={() => navigate(`/lobby/${roomCode}`)}>Create Game</button>
                 </div>
             </div>
         </div>

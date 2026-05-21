@@ -1,14 +1,11 @@
 import {useState} from "react";
+import {useNavigate} from 'react-router-dom';
 import '../styling/HomeScreen.css';
 import CreateGame from './CreateGame.tsx';
 
 function HomeScreen() {
-  
-  const [showCreateGame, setShowCreateGame] = useState(false);
 
-  if (showCreateGame) {
-    return <CreateGame />;
-  }
+    const navigate = useNavigate();
 
   return (
     <div className="home-container">
@@ -16,8 +13,8 @@ function HomeScreen() {
             <img src="/images/edited/logo.png" className="logo" />
         </div>
         <div className='buttons'>
-            <button className="btn btn-primary" onClick={() => setShowCreateGame(true)}>Create Game</button>
-            <button className='btn btn-secondary'>Join Game</button>
+            <button className="btn btn-primary" onClick={() => navigate('/creategame')}>Create Game</button>
+            <button className='btn btn-secondary' onClick={() => navigate('/joingame')}>Join Game</button>
         </div>
         <div className='side-image-left'>
             <img src="/images/edited/backdrop.png" />
