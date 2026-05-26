@@ -1,0 +1,60 @@
+.game-setting-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: min(480px, 100%);
+  padding: 1.75rem;
+}
+
+.game-setting-container h3 {
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.setting-box {
+  width: 100%;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.setting-item label {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+.setting-dropbox,
+.setting-input {
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--bg-panel-border);
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--text-primary);
+  font-size: 1rem;
+  width: 100%;
+}
+
+.setting-dropbox:focus,
+.setting-input:focus {
+  outline: none;
+  border-color: rgba(155, 93, 229, 0.65);
+}
+
+.setting-dropbox option {
+  background: #1a0f14;
+}
+
+.setting-error {
+  color: #ff8fab;
+  font-size: 0.85rem;
+}
+
+.btn-create {
+  margin-top: 0.75rem;
+  width: 100%;
+}

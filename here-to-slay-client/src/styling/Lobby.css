@@ -1,0 +1,119 @@
+.lobby-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+.lobby-card {
+  width: min(520px, 100%);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
+.lobby-logo {
+  width: 200px;
+  margin-bottom: 0.5rem;
+  opacity: 0.95;
+}
+
+.lobby-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.room-code-box {
+  margin-bottom: 1.75rem;
+}
+
+.room-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.room-code {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.35em;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(240, 180, 41, 0.25);
+  color: var(--accent-gold);
+}
+
+.players-section h2 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.players-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+}
+
+.player-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  text-align: left;
+}
+
+.player-card.joined {
+  background: rgba(155, 93, 229, 0.16);
+  border: 1px solid rgba(155, 93, 229, 0.4);
+}
+
+.player-card.waiting {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.player-card__name {
+  font-weight: 600;
+}
+
+.player-card__role {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.lobby-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.lobby-error {
+  color: #ff8fab;
+  margin-bottom: 0.75rem;
+}
+
+.lobby-loading,
+.lobby-hint {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.room-code-input {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+}

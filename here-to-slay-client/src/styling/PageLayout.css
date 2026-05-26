@@ -1,0 +1,33 @@
+.page-layout {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.page-layout__glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.page-layout__glow--left {
+  top: -80px;
+  left: -120px;
+  background: #9b5de5;
+}
+
+.page-layout__glow--right {
+  bottom: -100px;
+  right: -80px;
+  background: #f0b429;
+}
+
+.page-layout__content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
