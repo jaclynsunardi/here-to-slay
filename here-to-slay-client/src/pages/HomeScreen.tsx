@@ -1,29 +1,55 @@
-import {useState} from "react";
-import {useNavigate} from 'react-router-dom';
-import '../styling/HomeScreen.css';
-import CreateGame from './CreateGame.tsx';
+import { useNavigate } from "react-router-dom";
+import "../styling/HomeScreen.css";
 
-function HomeScreen() {
-
-    const navigate = useNavigate();
+export default function HomeScreen() {
+  const navigate = useNavigate();
 
   return (
-    <div className="home-container">
-        <div className="game-board">
-            <img src="/images/edited/logo.png" className="logo" />
+    <div className="title-screen">
+      <div className="title-screen__bg" aria-hidden />
+      <div className="title-screen__vignette" aria-hidden />
+
+      <main className="title-screen__main">
+        <img
+          src="/images/edited/logo.png"
+          className="title-screen__logo"
+          alt="Here to Slay"
+        />
+
+        <p className="title-screen__tagline">
+          Assemble six classes or slay three monsters to win.
+        </p>
+
+        <div className="title-screen__rules-hint">
+          <span>3 action points per turn</span>
+          <span className="title-screen__dot">·</span>
+          <span>Official rules</span>
         </div>
-        <div className='buttons'>
-            <button className="btn btn-primary" onClick={() => navigate('/creategame')}>Create Game</button>
-            <button className='btn btn-secondary' onClick={() => navigate('/joingame')}>Join Game</button>
+
+        <div className="title-screen__actions">
+          <button
+            type="button"
+            className="btn btn-primary title-screen__btn"
+            onClick={() => navigate("/creategame")}
+          >
+            Create Game
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary title-screen__btn"
+            onClick={() => navigate("/joingame")}
+          >
+            Join Game
+          </button>
         </div>
-        <div className='side-image-left'>
-            <img src="/images/edited/backdrop.png" />
-        </div>
-        <div className='side-image-right'>
-            <img src="/images/edited/backdrop.png" />
-        </div>
+      </main>
+
+      <div className="title-screen__art title-screen__art--left" aria-hidden>
+        <img src="/images/edited/backdrop.png" alt="" />
+      </div>
+      <div className="title-screen__art title-screen__art--right" aria-hidden>
+        <img src="/images/edited/backdrop.png" alt="" />
+      </div>
     </div>
   );
 }
-
-export default HomeScreen;

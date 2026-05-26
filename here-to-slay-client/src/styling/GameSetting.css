@@ -3,76 +3,58 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  width: 100%;
+  width: min(480px, 100%);
+  padding: 1.75rem;
 }
 
-.game-setting-container h2 {
-  font-size: 2rem;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+.game-setting-container h3 {
+  font-size: 1.35rem;
   margin: 0;
 }
 
 .setting-box {
-  background-color: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  padding: 2rem;
-  width: 400px;
-  max-width: 90vw;
+  width: 100%;
 }
 
 .setting-item {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.45rem;
 }
 
 .setting-item label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: 0.5rem;
-}
-
-.setting-item label:first-child {
-  margin-top: 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
 }
 
 .setting-dropbox,
 .setting-input {
-  padding: 0.6rem 0.8rem;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(255, 255, 255, 0.08);
-  color: white;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--bg-panel-border);
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--text-primary);
   font-size: 1rem;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .setting-dropbox:focus,
 .setting-input:focus {
   outline: none;
-  border-color: #7c3aed;
+  border-color: rgba(155, 93, 229, 0.65);
 }
 
 .setting-dropbox option {
-  background-color: #241010;
-  color: white;
+  background: #1a0f14;
+}
+
+.setting-error {
+  color: #ff8fab;
+  font-size: 0.85rem;
 }
 
 .btn-create {
-  margin-top: 1rem;
-  padding: 0.7rem 1.5rem;
-  border-radius: 6px;
-  border: none;
-  background-color: #7c3aed;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.1s, opacity 0.2s;
-}
-
-.btn-create:hover {
-  opacity: 0.9;
-  transform: scale(1.02);
+  margin-top: 0.75rem;
+  width: 100%;
 }

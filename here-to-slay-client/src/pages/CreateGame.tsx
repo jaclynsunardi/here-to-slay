@@ -1,22 +1,24 @@
-import {useState} from "react";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import PageLayout from "../components/PageLayout";
+import GameSetting from "../interactive-components/GameSetting";
 import "../styling/CreateGame.css";
-import HomeScreen from "./HomeScreen.tsx";
-import GameSetting from "../interactive-components/GameSetting.tsx";
 
+export default function CreateGame() {
+  const navigate = useNavigate();
 
-function CreateGame() {
-
-    const navigate = useNavigate();
-    
-    return (
-        <div className="create-container">
-            <h1>Create Game</h1>
-            <GameSetting />
-            <button className="go-back-button" onClick={() => navigate('/')}>Go Back</button>
-
-        </div>
-    );
+  return (
+    <PageLayout>
+      <div className="create-container">
+        <h1>Create Game</h1>
+        <GameSetting />
+        <button
+          type="button"
+          className="go-back-button btn btn-ghost"
+          onClick={() => navigate("/")}
+        >
+          Go Back
+        </button>
+      </div>
+    </PageLayout>
+  );
 }
-
-export default CreateGame;

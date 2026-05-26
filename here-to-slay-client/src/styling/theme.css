@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Outfit:wght@400;500;600;700&display=swap");
+
+:root {
+  --bg-deep: #120808;
+  --bg-panel: rgba(28, 14, 22, 0.82);
+  --bg-panel-border: rgba(255, 200, 120, 0.14);
+  --text-primary: #faf3e8;
+  --text-muted: rgba(250, 243, 232, 0.62);
+  --accent-gold: #f0b429;
+  --accent-purple: #9b5de5;
+  --accent-crimson: #e63946;
+  --accent-teal: #2ec4b6;
+  --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --font-display: "Cinzel", serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(155, 93, 229, 0.18), transparent 32%),
+    radial-gradient(circle at 85% 10%, rgba(240, 180, 41, 0.12), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgba(230, 57, 70, 0.1), transparent 35%),
+    var(--bg-deep);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+.btn {
+  padding: 0.85rem 1.4rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #b185ff, #7b3fe4);
+  color: white;
+  box-shadow: 0 10px 24px rgba(123, 63, 228, 0.35);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border: 1px solid var(--bg-panel-border);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #ff8fab, #e63946);
+  color: white;
+  box-shadow: 0 10px 24px rgba(230, 57, 70, 0.28);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(14px);
+}
