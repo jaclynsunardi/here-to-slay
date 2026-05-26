@@ -1,0 +1,1128 @@
+{
+  "version": 1,
+  "instructions": "Copy the shape of `example` for each card in `cards`.\nLeave effectText as \"\" until you add rules text.\nheroClass: Bard | Ranger | Thief | Wizard | Guardian | Fighter\nheroEffect: None | Draw1 | Draw2 | OpponentDiscard1 | StealRandomFromHand | DestroyOpponentHero | SacrificeOwnHeroDraw2 | SearchDeckDrawHero | AllPlayersDiscard1\nmagicEffect: None | Draw2 | Draw3Discard2 | DestroyOpponentHero | StealOpponentHero | AllDraw1 | ReviveFromDiscard\nMonsters: set partyReq1Class to Any if any class counts; leave partyReq2* blank or delete those keys.",
+  "example": {
+    "id": "Hero-BearyWise",
+    "name": "Beary Wise",
+    "type": "Hero",
+    "heroClass": "Guardian",
+    "heroEffect": "Draw1",
+    "heroEffectMinRoll": 6,
+    "magicEffect": "None",
+    "modifierBonus": 0,
+    "copies": 2,
+    "effectText": "Roll 6+: Draw 1 card."
+  },
+  "cards": [
+    {
+      "id": "PartyLeader-CharismaticSong",
+      "name": "The Charismatic Song",
+      "type": "PartyLeader",
+      "heroClass": "Bard",
+      "heroEffect": "+1 to Hero's effect roll",
+      "heroEffectMinRoll": 0,
+      "magicEffect": "None",
+      "modifierBonus": 1,
+      "copies": 1,
+      "effectText": "Each time you roll to use a Hero's card's effect, +1 to your roll."
+    },
+    {
+      "id": "PartyLeader-CloakedSage",
+      "name": "The Cloaked Sage",
+      "type": "PartyLeader",
+      "heroClass": "Wizard",
+      "heroEffect": "Draw a card when playing a Magic card",
+      "heroEffectMinRoll": 0,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 1,
+      "effectText": "Each time you play a Magic card, DRAW a card."
+    },
+    {
+      "id": "PartyLeader-DivineArrow",
+      "name": "The Divine Arrow",
+      "type": "PartyLeader",
+      "heroClass": "Ranger",
+      "heroEffect": "+1 to Attack roll",
+      "heroEffectMinRoll": 0,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 1,
+      "effectText": "Each time you roll to ATTACK a Monster card, +1 to your roll."
+    },
+    {
+      "id": "PartyLeader-FistofReason",
+      "name": "The Fist of Reason",
+      "type": "PartyLeader",
+      "heroClass": "Fighter",
+      "heroEffect": "+2 to Challenge roll",
+      "heroEffectMinRoll": 0,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 1,
+      "effectText": "Each time you roll to CHALLENGE, +2 to your roll."
+    },
+    {
+      "id": "PartyLeader-ProtectingHorn",
+      "name": "The Protecting Horn",
+      "type": "PartyLeader",
+      "heroClass": "Guardian",
+      "heroEffect": "+1 or -1 to Modifier roll",
+      "heroEffectMinRoll": 0,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 1,
+      "effectText": "Each time you play a Modifier card on a roll, +1 or -1 to that roll."
+    },
+    {
+      "id": "PartyLeader-ShadowClaw",
+      "name": "The Shadow Claw",
+      "type": "PartyLeader",
+      "heroClass": "Thief",
+      "heroEffect": "Steal a random card from another player's hand",
+      "heroEffectMinRoll": 0,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 1,
+      "effectText": "Once per turn on your turn, you may spend an action point to pull a card from another player's hand."
+    },
+    {
+      "id": "Hero-BadAxe",
+      "name": "Bad Axe",
+      "type": "Hero",
+      "heroClass": "Fighter",
+      "heroEffect": "Destroy a Hero card",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: DESTROY a HERO card."
+    },
+    {
+      "id": "Hero-BearClaw",
+      "name": "Bear Claw",
+      "type": "Hero",
+      "heroClass": "Fighter",
+      "heroEffect": "Pull a card from another player's hand. If it is a Hero card, pull a second card from that player's hand.",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+: Pull a card from another player's hand. If it is a Hero card, pull a second card from that player's hand."
+    },
+    {
+      "id": "Hero-BearyWise",
+      "name": "Beary Wise",
+      "type": "Hero",
+      "heroClass": "Fighter",
+      "heroEffect": "Each other player must DISCARD a card. Choose one of the discarded cards and add it to your hand.",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+: Each other player must DISCARD a card. Choose one of the discarded cards and add it to your hand."
+    },
+    {
+      "id": "Hero-Bullseye",
+      "name": "Bullseye",
+      "type": "Hero",
+      "heroClass": "Ranger",
+      "heroEffect": "Look at the top 3 cards of the deck. Add one to your hand, then return the other two to the top of the deck in any order.",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+: Look at the top 3 cards of the deck. Add one to your hand, then return the other two to the top of the deck in any order."
+    },
+    {
+      "id": "Hero-BunBun",
+      "name": "Bun Bun",
+      "type": "Hero",
+      "heroClass": "Wizard",
+      "heroEffect": "Search the discard pile for a Magic card and add it to your hand",
+      "heroEffectMinRoll": 5,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 5+: Search the discard pile for a Magic card and add it to your hand."
+    },
+    {
+      "id": "Hero-Buttons",
+      "name": "Buttons",
+      "type": "Hero",
+      "heroClass": "Wizard",
+      "heroEffect": "Pull a card from another player's hand. If it is a Magic card, you may play it immediately",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6+: Pull a card from another player's hand. If it is a Magic card, you may play it immediately."
+    },
+    {
+      "id": "Hero-CalmingVoice",
+      "name": "Calming Voice",
+      "type": "Hero",
+      "heroClass": "Guardian",
+      "heroEffect": "Hero cards in your Party cannot be stolen until your next turn",
+      "heroEffectMinRoll": 9,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 9+: Hero cards in your Party cannot be stolen until your next turn."
+    },
+    {
+      "id": "Hero-DodgyDealer",
+      "name": "Dodgy Dealer",
+      "type": "Hero",
+      "heroClass": "Bard",
+      "heroEffect": "Trade hands with another player",
+      "heroEffectMinRoll": 9,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 9+: Trade hands with another player."
+    },
+    {
+      "id": "Hero-Fluffy",
+      "name": "Fluffy",
+      "type": "Hero",
+      "heroClass": "Wizard",
+      "heroEffect": "Destroy 2 Hero cards",
+      "heroEffectMinRoll": 10,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 10+: DESTROY 2 Hero cards."
+    },
+    {
+      "id": "Hero-FuryKnuckle",
+      "name": "Fury Knuckle",
+      "type": "Hero",
+      "heroClass": "Fighter",
+      "heroEffect": "Pull a card from another player's hand. If it is a Challenge card, pull a second card from that player's hand.",
+      "heroEffectMinRoll": 5,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 5+: Pull a card from another player's hand. If it is a Challenge card, pull a second card from that player's hand."
+    },
+    {
+      "id": "Hero-FuzzyCheeks",
+      "name": "Fuzzy Cheeks",
+      "type": "Hero",
+      "heroClass": "Bard",
+      "heroEffect": "Draw a card and play a Hero card from your hand immediately",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: DRAW a card and play a Hero card from your hand immediately."
+    },
+    {
+      "id": "Hero-GreedyCheeks",
+      "name": "Greedy Cheeks",
+      "type": "Hero",
+      "heroClass": "Bard",
+      "heroEffect": "Each other player must give you a card from their hand.",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: Each other player must give you a card from their hand."
+    },
+    {
+      "id": "Hero-GuidingLight",
+      "name": "Guiding Light",
+      "type": "Hero",
+      "heroClass": "Guardian",
+      "heroEffect": "Search the discard pile for a Hero card and add it to your hand",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+: Search the discard pile for a Hero card and add it to your hand."
+    },
+    {
+      "id": "Hero-HeavyBear",
+      "name": "Heavy Bear",
+      "type": "Hero",
+      "heroClass": "Fighter",
+      "heroEffect": "Choose a player. That player must DISCARD 2 cards.",
+      "heroEffectMinRoll": 5,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 5+: Choose a player. That player must DISCARD 2 cards."
+    },
+    {
+      "id": "Hero-HolyCurselifter",
+      "name": "Holy Curselifter",
+      "type": "Hero",
+      "heroClass": "Guardian",
+      "heroEffect": "Return a Cursed Item card equipped to a Hero card in your Party to your hand.",
+      "heroEffectMinRoll": 5,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 5+: Return a Cursed Item card equipped to a Hero card in your Party to your hand."
+    },
+    {
+      "id": "Hero-Hook",
+      "name": "Hook",
+      "type": "Hero",
+      "heroClass": "Ranger",
+      "heroEffect": "Play an Item card from your hand immediately and DRAW a card",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6: Play an Item card from your hand immediately and DRAW a card."
+    },
+    {
+      "id": "Hero-Hopper",
+      "name": "Hopper",
+      "type": "Hero",
+      "heroClass": "Wizard",
+      "heroEffect": "Choose a player. That player must SACRIFICE a Hero card",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+: Choose a player. That player must SACRIFICE a Hero card."
+    },
+    {
+      "id": "Hero-IronResolve",
+      "name": "Iron Resolve",
+      "type": "Hero",
+      "heroClass": "Guardian",
+      "heroEffect": "Cards you play cannot be challenged for the rest of your turn",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: Cards you play cannot be challenged for the rest of your turn."
+    },
+    {
+      "id": "Hero-KitNapper",
+      "name": "Kit Napper",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Steal a Hero card",
+      "heroEffectMinRoll": 9,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 9+: STEAL a Hero card."
+    },
+    {
+      "id": "Hero-LookieRookie",
+      "name": "Lookie Rookie",
+      "type": "Hero",
+      "heroClass": "Ranger",
+      "heroEffect": "Search the discard pile for an Item card and add it to your hand",
+      "heroEffectMinRoll": 5,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 5+: Search the discard pile for an Item card and add it to your hand."
+    },
+    {
+      "id": "Hero-LuckyBucky",
+      "name": "Lucky Bucky",
+      "type": "Hero",
+      "heroClass": "Bard",
+      "heroEffect": "Pull a card from another player's hand. If that card is a Hero card, you may play it immediately",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+: Pull a card from another player's hand. If that card is a Hero card, you may play it immediately."
+    },
+    {
+      "id": "Hero-MellowDee",
+      "name": "Mellow Dee",
+      "type": "Hero",
+      "heroClass": "Bard",
+      "heroEffect": "Draw a card. If that card is a Hero card, you may play it immediately",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+:DRAW a card. If that card is a Hero card, you may play it immediately."
+    },
+    {
+      "id": "Hero-Meowzio",
+      "name": "Meowzio",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Choose a player. STEAL a Hero from that player and pull a card from that player's hand.",
+      "heroEffectMinRoll": 10,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 10+: Choose a player. STEAL a Hero from that player and pull a card from that player's hand."
+    },
+    {
+      "id": "Hero-MightyBlade",
+      "name": "Mighty Blade",
+      "type": "Hero",
+      "heroClass": "Guardian",
+      "heroEffect": "Hero cards in your Party cannot be destroyed until your next turn",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: Hero cards in your Party cannot be destroyed until your next turn."
+    },
+    {
+      "id": "Hero-NappingNibbles",
+      "name": "Napping Nibbles",
+      "type": "Hero",
+      "heroClass": "Bard",
+      "heroEffect": "Do nothing",
+      "heroEffectMinRoll": 2,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 2+: Do nothing."
+    },
+    {
+      "id": "Hero-PanChucks",
+      "name": "Pan Chucks",
+      "type": "Hero",
+      "heroClass": "Fighter",
+      "heroEffect": "Draw 2 cards. If at least one of those cards is a Challenge card, you may reveal it, then DESTROY a Hero card.",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: DRAW 2 cards. If at least one of those cards is a Challenge card, you may reveal it, then DESTROY a Hero card."
+    },
+    {
+      "id": "Hero-Peanut",
+      "name": "Peanut",
+      "type": "Hero",
+      "heroClass": "Bard",
+      "heroEffect": "Draw 2 cards",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+: DRAW 2 cards."
+    },
+    {
+      "id": "Hero-PlunderingPuma",
+      "name": "Plundering Puma",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Pull 2 cards from another player's hand. That player may DRAW a card",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6+: Pull 2 cards from another player's hand. That player may DRAW a card."
+    },
+    {
+      "id": "Hero-QiBear",
+      "name": "Qi Bear",
+      "type": "Hero",
+      "heroClass": "Fighter",
+      "heroEffect": "Discard up to 3 cards. For each card discarded, DESTROY a Hero card.",
+      "heroEffectMinRoll": 10,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 10+: DISCARD up to 3 cards. For each card discarded, DESTROY a Hero card."
+    },
+    {
+      "id": "Hero-QuickDraw",
+      "name": "Quick Draw",
+      "type": "Hero",
+      "heroClass": "Ranger",
+      "heroEffect": "Draw 2 cards. If at least one of those cards is an Item card, you may play one of them immediately",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: DRAW 2 cards. If at least one of those cards is an Item card, you may play one of them immediately."
+    },
+    {
+      "id": "Hero-RadiantHorn",
+      "name": "Radiant Horn",
+      "type": "Hero",
+      "heroClass": "Guardian",
+      "heroEffect": "Search the discard pile for a Modifier card and add it to your hand",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6+: Search the discard pile for a Modifier card and add it to your hand."
+    },
+    {
+      "id": "Hero-SeriousGrey",
+      "name": "Serious Grey",
+      "type": "Hero",
+      "heroClass": "Ranger",
+      "heroEffect": "Destroy a Hero and Draw a card",
+      "heroEffectMinRoll": 9,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 9+: DESTROY a Hero and DRAW a card."
+    },
+    {
+      "id": "Hero-SharpFox",
+      "name": "Sharp Fox",
+      "type": "Hero",
+      "heroClass": "Ranger",
+      "heroEffect": "Look at another player's hand",
+      "heroEffectMinRoll": 5,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 5+: Look at another player's hand."
+    },
+    {
+      "id": "Hero-Shurikitty",
+      "name": "Shurikitty",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Destroy a Hero card. If that Hero card had an Item card equipped to it, add that Item card to your hand instead of moving it to the discard pile.",
+      "heroEffectMinRoll": 9,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 9+: DESTROY a Hero card. If that Hero card had an Item card equipped to it, add that Item card to your hand instead of moving it to the discard pile."
+    },
+    {
+      "id": "Hero-SilentShadow",
+      "name": "Silent Shadow",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Look at another player's hand. Choose a card and add it to your hand.",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: Look at another player's hand. Choose a card and add it to your hand."
+    },
+    {
+      "id": "Hero-SlipperyPaws",
+      "name": "Slippery Paws",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Pull 2 cards from another player's hand, then DISCARD one of those cards.",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6+: Pull 2 cards from another player's hand, then DISCARD one of those cards."
+    },
+    {
+      "id": "Hero-SlyPickings",
+      "name": "Sly Pickings",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Pull a card from another player's hand. If that card is an Item card, you may play it immediately",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6+: Pull a card from another player's hand. If that card is an Item card, you may play it immediately."
+    },
+    {
+      "id": "Hero-SmoothMimimeow",
+      "name": "Smooth Mimimeow",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Pull a card from the hand of each other player with a Thief in their Party.",
+      "heroEffectMinRoll": 7,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 7+: Pull a card from the hand of each other player with a Thief in their Party."
+    },
+    {
+      "id": "Hero-Snowball",
+      "name": "Snowball",
+      "type": "Hero",
+      "heroClass": "Thief",
+      "heroEffect": "Draw a card. If it is a Magic card, you may play it immediately and Draw a second card",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6+: DRAW a card. If it is a Magic card, you may play it immediately and DRAW a second card."
+    },
+    {
+      "id": "Hero-Spooky",
+      "name": "Spooky",
+      "type": "Hero",
+      "heroClass": "Wizard",
+      "heroEffect": "Each other player must SACRIFICE a Hero card",
+      "heroEffectMinRoll": 10,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 10+: Each other player must SACRIFICE a Hero card."
+    },
+    {
+      "id": "Hero-TipsyTootie",
+      "name": "Tipsy Tootie",
+      "type": "Hero",
+      "heroClass": "Bard",
+      "heroEffect": "Choose a player. STEAL a Hero card from that player's Party and move Tipsy Tootie to that player's Party.",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6+: Choose a player. STEAL a Hero card from that player's Party and move Tipsy Tootie to that player's Party."
+    },
+    {
+      "id": "Hero-ToughTeddy",
+      "name": "Tough Teddy",
+      "type": "Hero",
+      "heroClass": "Fighter",
+      "heroEffect": "Each other player with a Fighter in their Party must DISCARD a card.",
+      "heroEffectMinRoll": 4,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 4+: Each other player with a Fighter in their Party must DISCARD a card."
+    },
+    {
+      "id": "Hero-VibrantGlow",
+      "name": "Vibrant Glow",
+      "type": "Hero",
+      "heroClass": "Guardian",
+      "heroEffect": "+5 to all of your rolls until the end of your turn",
+      "heroEffectMinRoll": 9,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 9+: +5 to all of your rolls until the end of your turn."
+    },
+    {
+      "id": "Hero-Whiskers",
+      "name": "Whiskers",
+      "type": "Hero",
+      "heroClass": "Wizard",
+      "heroEffect": "STEAL a Hero card and DESTROY a Hero card",
+      "heroEffectMinRoll": 11,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 11+: STEAL a Hero card and DESTROY a Hero card."
+    },
+    {
+      "id": "Hero-Wiggles",
+      "name": "Wiggles",
+      "type": "Hero",
+      "heroClass": "Wizard",
+      "heroEffect": "STEAL a Hero card and roll to use its effect immediately",
+      "heroEffectMinRoll": 10,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 10+: STEAL a Hero card and roll to use its effect immediately."
+    },
+    {
+      "id": "Hero-Wildshot",
+      "name": "Wildshot",
+      "type": "Hero",
+      "heroClass": "Ranger",
+      "heroEffect": "DRAW 3 cards and DISCARD a card",
+      "heroEffectMinRoll": 8,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 8+: DRAW 3 cards and DISCARD a card."
+    },
+    {
+      "id": "Hero-WilyRed",
+      "name": "Wily Red",
+      "type": "Hero",
+      "heroClass": "Ranger",
+      "heroEffect": "DRAW cards until you have 7 cards in your hand",
+      "heroEffectMinRoll": 10,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 10+: DRAW cards until you have 7 cards in your hand."
+    },
+    {
+      "id": "Hero-WiseShield",
+      "name": "Wise Shield",
+      "type": "Hero",
+      "heroClass": "Guardian",
+      "heroEffect": "+3 to all of your rolls until the end of your turn",
+      "heroEffectMinRoll": 6,
+      "magicEffect": "None",
+      "modifierBonus": 0,
+      "copies": 2,
+      "effectText": "Roll 6+: +3 to all of your rolls until the end of your turn."
+    },
+    {
+      "id": "CursedItem-SealingKey",
+      "name": "Sealing Key",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "You cannot use the equipped Hero card's effect."
+    },
+    {
+      "id": "CursedItem-ShinyCoin",
+      "name": "Shiny Coin",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "If you successfully roll to use the equipped Hero card's effect, DISCARD a card."
+    },
+    {
+      "id": "CursedItem-Snake'sEyes",
+      "name": "Snake's Eyes",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "Each time you roll to use the equipped Hero card's effect, -2 to your roll."
+    },
+    {
+      "id": "Item-BardMask",
+      "name": "Bard Mask",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "The equipped Hero card is considered a Bard instead of its original class."
+    },
+    {
+      "id": "Item-DecoyDoll",
+      "name": "Decoy Doll",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "If the equipped Hero card would be sacrificed or destroyed, move Decoy Doll to the discard pile instead."
+    },
+    {
+      "id": "Item-FighterMask",
+      "name": "Fighter Mask",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "The equipped Hero card is considered a Fighter instead of its original class."
+    },
+    {
+      "id": "Item-GuardianMask",
+      "name": "Guardian Mask",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "The equipped Hero card is considered a Guardian instead of its original class."
+    },
+    {
+      "id": "Item-RangerMask",
+      "name": "Ranger Mask",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "The equipped Hero card is considered a Ranger instead of its original class."
+    },
+    {
+      "id": "Item-ReallyBigRing",
+      "name": "Really Big Ring",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "Each time you roll to use the equipped Hero card's effect, +2 to your roll."
+    },
+    {
+      "id": "Item-RustyCoin",
+      "name": "Rusty Coin",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "If you unsuccessfully roll to use the equipped Hero card's effect, DRAW a card."
+    },
+    {
+      "id": "Item-ThiefMask",
+      "name": "Thief Mask",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "The equipped Hero card is considered a Thief instead of its original class."
+    },
+    {
+      "id": "Item-WizardMask",
+      "name": "Wizard Mask",
+      "type": "Item",
+      "copies": 3,
+      "effectText": "The equipped Hero card is considered a Wizard instead of its original class."
+    },
+    {
+      "id": "Magic-CalltotheFallen",
+      "name": "Calltothe Fallen",
+      "type": "Magic",
+      "magicEffect": "None",
+      "copies": 2,
+      "effectText": "Search the discard pile for a Hero card and add it to your hand."
+    },
+    {
+      "id": "Magic-CriticalBoost",
+      "name": "Critical Boost",
+      "type": "Magic",
+      "magicEffect": "DRAW 3 cards and DISCARD a card",
+      "copies": 2,
+      "effectText": "DRAW 3 cards and DISCARD a card."
+    },
+    {
+      "id": "Magic-DestructiveSpell",
+      "name": "Destructive Spell",
+      "type": "Magic",
+      "magicEffect": "DISCARD a card, then DESTROY a Hero card",
+      "copies": 2,
+      "effectText": "DISCARD a card, then DESTROY a Hero card."
+    },
+    {
+      "id": "Magic-EnchantedSpell",
+      "name": "Enchanted Spell",
+      "type": "Magic",
+      "magicEffect": "+2 to all of your rolls until the end of your turn",
+      "copies": 2,
+      "effectText": "+2 to all of your rolls until the end of your turn."
+    },
+    {
+      "id": "Magic-EntanglingTrap",
+      "name": "Entangling Trap",
+      "type": "Magic",
+      "magicEffect": "DISCARD 2 cards, then STEAL a Hero card",
+      "copies": 2,
+      "effectText": "DISCARD 2 cards, then STEAL a Hero card."
+    },
+    {
+      "id": "Magic-ForcedExchange",
+      "name": "Forced Exchange",
+      "type": "Magic",
+      "magicEffect": "Choose a player. STEAL a Hero card from that player's Party, then move a Hero card from your Party to that player's Party.",
+      "copies": 2,
+      "effectText": "Choose a player. STEAL a Hero card from that player's Party, then move a Hero card from your Party to that player's Party."
+    },
+    {
+      "id": "Magic-ForcefulWinds",
+      "name": "Forceful Winds",
+      "type": "Magic",
+      "magicEffect": "Return every equipped Item card to its respective player's hand.",
+      "copies": 2,
+      "effectText": "Return every equipped Item card to its respective player's hand."
+    },
+    {
+      "id": "Magic-WindsofChange",
+      "name": "Windsof Change",
+      "type": "Magic",
+      "magicEffect": "Return an Item card equipped to any player's Hero card to that player's hand, then DRAW a card.",
+      "copies": 2,
+      "effectText": "Return an Item card equipped to any player's Hero card to that player's hand, then DRAW a card."
+    },
+    {
+      "id": "Modifier-1",
+      "name": "Modifier",
+      "type": "Modifier",
+      "modifierBonus": 2,
+      "modifierBonusAlt": -2,
+      "copies": 3,
+      "effectText": "Play this card after any player (including you) rolls the dice. +2 or -2 to that roll."
+    },
+    {
+      "id": "Modifier-2",
+      "name": "Modifier",
+      "type": "Modifier",
+      "modifierBonus": -4,
+      "copies": 3,
+      "effectText": "Play this card after any player (including you) rolls the dice. -4 to that roll."
+    },
+    {
+      "id": "Modifier-3",
+      "name": "Modifier",
+      "type": "Modifier",
+      "modifierBonus": 4,
+      "copies": 3,
+      "effectText": "Play this card after any player (including you) rolls the dice. +4 to that roll."
+    },
+    {
+      "id": "Modifier-4",
+      "name": "Modifier",
+      "type": "Modifier",
+      "modifierBonus": 1,
+      "modifierBonusAlt": -3,
+      "copies": 3,
+      "effectText": "Play this card after any player (including you) rolls the dice. +1 or -3 to that roll."
+    },
+    {
+      "id": "Modifier-5",
+      "name": "Modifier",
+      "type": "Modifier",
+      "modifierBonus": 3,
+      "modifierBonusAlt": -1,
+      "copies": 3,
+      "effectText": "Play this card after any player (including you) rolls the dice. +3 or -1 to that roll."
+    },
+    {
+      "id": "Challenge-1",
+      "name": "Challenge",
+      "type": "Challenge",
+      "copies": 15,
+      "effectText": "You may play this card when another player attempts to play a Hero, Item, or Magic card. CHALLENGE that card."
+    },
+    {
+      "id": "Monster-AbyssQueen",
+      "name": "Abyss Queen",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "Each time another player plays a Modifier card on one of your rolls, +1 to your roll.",
+      "failIfBelowOrEqual": 5,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "Monster-AnuranCauldron",
+      "name": "Anuran Cauldron",
+      "type": "Monster",
+      "rollThreshold": 7,
+      "copies": 1,
+      "effectText": "Each time your roll, +1 to your roll.",
+      "failIfBelowOrEqual": 5,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": "Monster-ArcticAries",
+      "name": "Arctic Aries",
+      "type": "Monster",
+      "rollThreshold": 10,
+      "copies": 1,
+      "effectText": "Each time your successfully roll to use a Hero card's effect, you may DRAW a card.",
+      "failIfBelowOrEqual": 6,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "Monster-Bloodwing",
+      "name": "Bloodwing",
+      "type": "Monster",
+      "rollThreshold": 9,
+      "copies": 1,
+      "effectText": "Each time another player CHALLENGES you, that player must DISCARD a card.",
+      "failIfBelowOrEqual": 6,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "Monster-CorruptedSabretooth",
+      "name": "Corrupted Sabretooth",
+      "type": "Monster",
+      "rollThreshold": 9,
+      "copies": 1,
+      "effectText": "Each time you would DESTROY a Hero card, you may STEAL that Hero card instead.",
+      "failIfBelowOrEqual": 6,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": "Monster-CrownedSerpent",
+      "name": "Crowned Serpent",
+      "type": "Monster",
+      "rollThreshold": 10,
+      "copies": 1,
+      "effectText": "Each time any player (including you) plays a Modifier card, you may DRAW a card.",
+      "failIfBelowOrEqual": 7,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "Monster-DarkDragonKing",
+      "name": "Dark Dragon King",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "Each time you roll for a Hero card's effect, +1 to your roll.",
+      "failIfBelowOrEqual": 4,
+      "failPenalty": "Discard2",
+      "partyRequirements": [
+        {
+          "heroClass": "Bard",
+          "count": 1
+        },
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "Monster-Dracos",
+      "name": "Dracos",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "Each time a Hero card in your Party is destroyed, you may DRAW a card.",
+      "failIfBelowOrEqual": 5,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "Monster-Malamammoth",
+      "name": "Malamammoth",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "Each time your DRAW an Item card, you may play it immediately.",
+      "failIfBelowOrEqual": 4,
+      "failPenalty": "Discard2",
+      "partyRequirements": [
+        {
+          "heroClass": "Ranger",
+          "count": 1
+        },
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "Monster-MegaSlime",
+      "name": "Mega Slime",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "You may spend an extra action point on each of your turns.",
+      "failIfBelowOrEqual": 7,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 4
+        }
+      ]
+    },
+    {
+      "id": "Monster-Orthus",
+      "name": "Orthus",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "Each time you DRAW a Magic card, you may play it immediately.",
+      "failIfBelowOrEqual": 4,
+      "failPenalty": "Discard2",
+      "partyRequirements": [
+        {
+          "heroClass": "Wizard",
+          "count": 1
+        },
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "Monster-RexMajor",
+      "name": "Rex Major",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "Each time you DRAW a Modifier card, you may reveal it and DRAW a second card.",
+      "failIfBelowOrEqual": 4,
+      "failPenalty": "Discard2",
+      "partyRequirements": [
+        {
+          "heroClass": "Guardian",
+          "count": 1
+        },
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "Monster-Terratuga",
+      "name": "Terratuga",
+      "type": "Monster",
+      "rollThreshold": 11,
+      "copies": 1,
+      "effectText": "Your Hero cards cannot be destroyed.",
+      "failIfBelowOrEqual": 7,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "Monster-TitanWyvern",
+      "name": "Titan Wyvern",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "Each time you roll for a Challenge card, +1 to your roll.",
+      "failIfBelowOrEqual": 4,
+      "failPenalty": "Discard2",
+      "partyRequirements": [
+        {
+          "heroClass": "Fighter",
+          "count": 1
+        },
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "Monster-WarwornOwlbear",
+      "name": "Warworn Owlbear",
+      "type": "Monster",
+      "rollThreshold": 8,
+      "copies": 1,
+      "effectText": "Item cards you play cannot be challenged.",
+      "failIfBelowOrEqual": 4,
+      "failPenalty": "SacrificeHero",
+      "partyRequirements": [
+        {
+          "heroClass": "Thief",
+          "count": 1
+        },
+        {
+          "genericHero": true,
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

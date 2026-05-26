@@ -1,0 +1,7 @@
+bin/
+obj/
+.vs/
+*.user
+*.md
+here-to-slay.http
+Properties/launchSettings.json

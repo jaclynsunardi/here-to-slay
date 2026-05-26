@@ -1,6 +1,7 @@
 import type { GameView } from "./types/game";
 
-export const BACKEND_URL = "http://localhost:5262";
+export const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5262";
 
 async function parseJson<T>(response: Response): Promise<T> {
   const text = await response.text();
