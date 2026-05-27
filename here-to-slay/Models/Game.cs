@@ -26,4 +26,6 @@ public class Game
     public int? LastRollDie2 { get; set; }
     public int? LastRollModifier { get; set; }
     public int? LastRollTotal { get; set; }
+    public PendingChoiceState? PendingChoice { get; set; }
+    public List<CardInstance> ChoiceStaging { get; set; } = new();
 }

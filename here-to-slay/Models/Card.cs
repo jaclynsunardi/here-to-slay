@@ -52,6 +52,24 @@ public enum AttackFailPenalty
     Discard2
 }
 
+public enum ItemKind
+{
+    Equipment,
+    Cursed
+}
+
+/// <summary>Passive or activated party leader ability (loaded from card data).</summary>
+public enum PartyLeaderAbilityKind
+{
+    None,
+    HeroRollBonus,
+    OnMagicDraw,
+    AttackRollBonus,
+    ChallengeRollBonus,
+    ModifierChoice,
+    StealFromHandOncePerTurn
+}
+
 public record PartyRequirement(HeroClass? HeroClass, int Count, bool GenericHero = false);
 
 public class CardDefinition
@@ -66,6 +84,10 @@ public class CardDefinition
     public List<PartyRequirement> PartyRequirements { get; set; } = new();
     public HeroEffect HeroEffect { get; set; }
     public MagicEffect MagicEffect { get; set; }
+    public ItemKind? ItemKind { get; set; }
+    public PartyLeaderAbilityKind PartyLeaderAbility { get; set; }
+    public int PartyLeaderAbilityValue { get; set; }
+    public int? PartyLeaderAbilityAltValue { get; set; }
     public int ModifierBonus { get; set; }
     /// <summary>Second value for modifiers like +2/-2 (player picks one when playing the card).</summary>
     public int? ModifierBonusAlt { get; set; }

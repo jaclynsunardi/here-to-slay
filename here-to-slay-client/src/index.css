@@ -9,3 +9,7 @@
 #root {
   min-height: 100vh;
 }
+
+html:has(.game-board) {
+  overflow: hidden;
+}

@@ -5,7 +5,16 @@ namespace HereToSlay.Services;
 public class GameService
 {
     private readonly Random _rng = new();
-    private CardEffectExecutor Effects => new(_rng);
+    private readonly CardEffectExecutor _effects;
+    private readonly PendingChoiceService _choices;
+
+    public GameService()
+    {
+        _effects = new CardEffectExecutor(_rng);
+        _choices = new PendingChoiceService(_rng);
+        _choices.BindEffects(_effects);
+        _effects.BindPendingChoices(_choices);
+    }
 
     public GameViewDto ToView(Game game, string viewingPlayerId)
     {
@@ -31,13 +40,33 @@ public class GameService
             game.MonsterDeck.Count,
             game.DiscardPile.Count,
             game.MonsterRow.Select(c => ToCardView(c)).ToList(),
-            game.Players.Select(p => ToPlayerView(p, p.Id == viewingPlayerId)).ToList(),
-            viewingPlayerId);
+            game.Players.Select(p => ToPlayerView(game, p, p.Id == viewingPlayerId, viewingPlayerId)).ToList(),
+            viewingPlayerId,
+            BuildPendingChoiceView(game, viewingPlayerId));
+    }
+
+    public void ResolvePendingChoice(
+        Game game,
+        string playerId,
+        IReadOnlyList<string> selectedCardInstanceIds,
+        string? selectedOption)
+    {
+        _choices.Resolve(game, playerId, selectedCardInstanceIds, selectedOption);
     }
 
     private static CardViewDto ToCardView(CardInstance card, bool isPartyLeader = false)
     {
         var def = CardCatalog.Get(card.DefinitionId);
+        var leaderAbility = def.Type == CardType.PartyLeader || isPartyLeader
+            ? def.PartyLeaderAbility.ToString()
+            : null;
+        var leaderValue = def.Type == CardType.PartyLeader || isPartyLeader
+            ? def.PartyLeaderAbilityValue
+            : (int?)null;
+        var leaderAlt = def.Type == CardType.PartyLeader || isPartyLeader
+            ? def.PartyLeaderAbilityAltValue
+            : null;
+
         return new CardViewDto(
             card.InstanceId,
             card.DefinitionId,
@@ -52,11 +81,21 @@ public class GameService
             def.PartyRequirements.Select(r =>
                 new PartyRequirementDto(r.HeroClass?.ToString(), r.Count, r.GenericHero)).ToList(),
             card.AttachedItems.Select(i => ToCardView(i)).ToList(),
-            isPartyLeader);
+            isPartyLeader,
+            leaderAbility,
+            leaderValue,
+            leaderAlt);
     }
 
-    private static PlayerViewDto ToPlayerView(Player player, bool revealHand)
+    private static PlayerViewDto ToPlayerView(
+        Game game,
+        Player player,
+        bool revealOwnHand,
+        string viewingPlayerId)
     {
+        var revealHand = revealOwnHand
+            || ShouldRevealHandForPendingChoice(game, viewingPlayerId, player);
+
         var hand = revealHand
             ? player.Hand.Select(c => ToCardView(c)).ToList()
             : new List<CardViewDto>();
@@ -73,6 +112,75 @@ public class GameService
             player.HeroesRolledThisTurn.ToList());
     }
 
+    private static bool ShouldRevealHandForPendingChoice(Game game, string viewerId, Player handOwner)
+    {
+        var pending = game.PendingChoice;
+        return pending != null
+            && pending.PlayerId == viewerId
+            && pending.Continuation.Type == PendingContinuationType.PickFromOpponentHand
+            && pending.Continuation.TargetPlayerId == handOwner.Id;
+    }
+
+    private static PendingChoiceViewDto? BuildPendingChoiceView(Game game, string viewingPlayerId)
+    {
+        var pending = game.PendingChoice;
+        if (pending == null) return null;
+
+        var isYours = pending.PlayerId == viewingPlayerId;
+        if (!isYours)
+        {
+            return new PendingChoiceViewDto(
+                pending.Kind.ToString(),
+                "Waiting for another player to choose…",
+                0,
+                0,
+                [],
+                [],
+                false);
+        }
+
+        var cards = pending.Kind == PendingChoiceKind.SelectCards
+            ? ResolveSelectableCards(game, pending).Select(c => ToCardView(c)).ToList()
+            : [];
+
+        return new PendingChoiceViewDto(
+            pending.Kind.ToString(),
+            pending.Prompt,
+            pending.MinSelections,
+            pending.MaxSelections,
+            cards,
+            pending.Options,
+            true);
+    }
+
+    private static IEnumerable<CardInstance> ResolveSelectableCards(Game game, PendingChoiceState pending)
+    {
+        foreach (var id in pending.SelectableCardInstanceIds)
+        {
+            var card = FindCardByInstanceId(game, id);
+            if (card != null) yield return card;
+        }
+    }
+
+    private static CardInstance? FindCardByInstanceId(Game game, string instanceId)
+    {
+        foreach (var p in game.Players)
+        {
+            var inHand = p.Hand.FirstOrDefault(c => c.InstanceId == instanceId);
+            if (inHand != null) return inHand;
+            foreach (var hero in p.Party)
+            {
+                var onHero = hero.AttachedItems.FirstOrDefault(c => c.InstanceId == instanceId);
+                if (onHero != null) return onHero;
+            }
+        }
+
+        return game.DiscardPile.FirstOrDefault(c => c.InstanceId == instanceId)
+            ?? game.ChoiceStaging.FirstOrDefault(c => c.InstanceId == instanceId)
+            ?? game.Deck.FirstOrDefault(c => c.InstanceId == instanceId);
+    }
+
+
     public void StartGame(Game game)
     {
         if (game.State != GameState.Waiting)
@@ -86,6 +194,8 @@ public class GameService
         game.DiscardPile.Clear();
         game.MonsterRow.Clear();
 
+        var shuffledLeaders = CardCatalog.PartyLeaderIds.OrderBy(_ => _rng.Next()).ToList();
+
         for (var i = 0; i < game.Players.Count; i++)
         {
             var player = game.Players[i];
@@ -95,8 +205,10 @@ public class GameService
             player.HeroesRolledThisTurn.Clear();
             player.ChallengedByPlayerId = null;
             player.ActiveChallengeCardInstanceId = null;
+            PartyLeaderAbilities.ResetTurnState(player);
+            player.HeroTurnBuffs = new HeroTurnBuffs();
 
-            var leaderId = CardCatalog.PartyLeaderIds[i % CardCatalog.PartyLeaderIds.Length];
+            var leaderId = shuffledLeaders[i % shuffledLeaders.Count];
             player.PartyLeader = new CardInstance { DefinitionId = leaderId };
 
             DrawCards(game, player, GameRules.StartingHandSize);
@@ -125,7 +237,8 @@ public class GameService
         string cardInstanceId,
         string? targetHeroInstanceId,
         string? targetPlayerId,
-        bool rollHeroOnPlay)
+        string? modifierCardInstanceId,
+        bool _)
     {
         var player = RequirePlayer(game, playerId);
         EnsureCurrentPlayer(game, player);
@@ -137,9 +250,9 @@ public class GameService
 
         if (player.ChallengedByPlayerId != null && def.Type is CardType.Hero or CardType.Item)
             ResolveChallengeBeforePlay(game, player, () =>
-                ExecutePlayCard(game, player, card, def, targetHeroInstanceId, targetPlayerId, rollHeroOnPlay));
+                ExecutePlayCard(game, player, card, def, targetHeroInstanceId, targetPlayerId, modifierCardInstanceId));
         else
-            ExecutePlayCard(game, player, card, def, targetHeroInstanceId, targetPlayerId, rollHeroOnPlay);
+            ExecutePlayCard(game, player, card, def, targetHeroInstanceId, targetPlayerId, modifierCardInstanceId);
     }
 
     public void PlayChallenge(Game game, string playerId, string challengeCardInstanceId, string targetPlayerId)
@@ -177,31 +290,15 @@ public class GameService
         if (player.HeroesRolledThisTurn.Contains(hero.InstanceId))
             throw new InvalidOperationException("You already used that hero's roll this turn.");
 
-        var modifier = ConsumeModifier(game, player, modifierCardInstanceId);
-        var (die1, die2, total) = RollDice(game, modifier);
-        player.HeroesRolledThisTurn.Add(hero.InstanceId);
-
         var def = CardCatalog.Get(hero.DefinitionId);
-        if (hero.AttachedItems.Any(i => CardCatalog.Get(i.DefinitionId).Id == "CursedItem-SealingKey"))
-        {
-            game.LastMessage = $"{def.Name} cannot use its effect (Sealing Key).";
-            return;
-        }
-
-        var itemBonus = HeroRollItemBonus(hero);
-        total += itemBonus;
-        var minRoll = def.HeroEffectMinRoll;
-        if (!string.IsNullOrWhiteSpace(def.EffectScript) && total >= minRoll)
-        {
-            Effects.Apply(game, player, def, targetPlayerId: null, hero);
-            game.LastMessage =
-                $"{def.Name}'s ability succeeds ({die1}+{die2}{(modifier + itemBonus > 0 ? $"+{modifier + itemBonus}" : "")}={total})!";
-        }
-        else
-        {
-            game.LastMessage =
-                $"{def.Name} rolls {die1}+{die2}{(modifier + itemBonus > 0 ? $"+{modifier + itemBonus}" : "")}={total} — need {minRoll}+.";
-        }
+        ResolveHeroAbilityRoll(
+            game,
+            player,
+            hero,
+            def,
+            targetPlayerId: null,
+            modifierCardInstanceId,
+            markHeroRolledThisTurn: true);
     }
 
     public void AttackMonster(Game game, string playerId, string monsterInstanceId, string? modifierCardInstanceId)
@@ -219,12 +316,13 @@ public class GameService
 
         var modifier = ConsumeModifier(game, player, modifierCardInstanceId);
         var (die1, die2, natural) = RollDiceNatural();
-        var total = natural + modifier;
-        SetRollDisplay(game, die1, die2, modifier, total);
+        var leaderBonus = PartyLeaderAbilities.AttackRollBonus(player);
+        var total = natural + modifier + leaderBonus;
+        SetRollDisplay(game, die1, die2, modifier + leaderBonus, total);
 
         if (monsterDef.FailIfRollAtOrBelow != null && total <= monsterDef.FailIfRollAtOrBelow)
         {
-            Effects.ApplyAttackFailPenalty(game, player, monsterDef);
+            _effects.ApplyAttackFailPenalty(game, player, monsterDef);
             game.LastMessage =
                 $"Attack fails ({total} ≤ {monsterDef.FailIfRollAtOrBelow}) — {PenaltyText(monsterDef)}.";
             return;
@@ -285,7 +383,7 @@ public class GameService
         CardDefinition def,
         string? targetHeroInstanceId,
         string? targetPlayerId,
-        bool rollHeroOnPlay)
+        string? modifierCardInstanceId)
     {
         SpendActionPoints(game, GameRules.PlayCardCost);
 
@@ -293,8 +391,14 @@ public class GameService
         {
             case CardType.Hero:
                 PlayHero(game, player, card, def);
-                if (rollHeroOnPlay)
-                    TryImmediateHeroRoll(game, player, card);
+                ResolveHeroAbilityRoll(
+                    game,
+                    player,
+                    card,
+                    def,
+                    targetPlayerId,
+                    modifierCardInstanceId,
+                    markHeroRolledThisTurn: false);
                 break;
             case CardType.Item:
                 PlayItem(game, player, card, targetHeroInstanceId);
@@ -326,28 +430,51 @@ public class GameService
         game.LastMessage = $"{def.Name} joins the party!";
     }
 
-    private void TryImmediateHeroRoll(Game game, Player player, CardInstance hero)
+    private void ResolveHeroAbilityRoll(
+        Game game,
+        Player player,
+        CardInstance hero,
+        CardDefinition def,
+        string? targetPlayerId,
+        string? modifierCardInstanceId,
+        bool markHeroRolledThisTurn)
     {
-        if (player.HeroesRolledThisTurn.Contains(hero.InstanceId))
+        if (markHeroRolledThisTurn)
+            player.HeroesRolledThisTurn.Add(hero.InstanceId);
+
+        if (hero.AttachedItems.Any(i => CardCatalog.Get(i.DefinitionId).Id == "CursedItem-SealingKey"))
+        {
+            game.LastMessage = $"{def.Name} cannot use its effect (Sealing Key).";
             return;
+        }
 
-        var def = CardCatalog.Get(hero.DefinitionId);
-        var (die1, die2, total) = RollDice(game, 0);
-        player.HeroesRolledThisTurn.Add(hero.InstanceId);
-
+        var modifier = ConsumeModifier(game, player, modifierCardInstanceId);
+        var (die1, die2, natural) = RollDiceNatural();
         var itemBonus = HeroRollItemBonus(hero);
-        var totalWithItems = total + itemBonus;
-        if (!string.IsNullOrWhiteSpace(def.EffectScript) && totalWithItems >= def.HeroEffectMinRoll)
+        var leaderBonus = PartyLeaderAbilities.HeroRollBonus(player);
+        var turnBonus = player.HeroTurnBuffs.RollBonusUntilEndOfTurn;
+        var total = natural + modifier + itemBonus + leaderBonus + turnBonus;
+        SetRollDisplay(game, die1, die2, modifier + itemBonus + leaderBonus + turnBonus, total);
+
+        var minRoll = def.HeroEffectMinRoll;
+        var bonusLabel = FormatRollBonuses(modifier, itemBonus, leaderBonus + turnBonus);
+
+        if (string.IsNullOrWhiteSpace(def.EffectScript) || total < minRoll)
         {
-            Effects.Apply(game, player, def, null, hero);
-            game.LastMessage +=
-                $" Immediate roll {die1}+{die2}{(itemBonus > 0 ? $"+{itemBonus}" : "")}={totalWithItems} — ability triggers!";
+            game.LastMessage =
+                $"{game.LastMessage} Rolled {die1}+{die2}{bonusLabel}={total} — need {minRoll}+.";
+            return;
         }
-        else
+
+        _effects.Apply(game, player, def, targetPlayerId, hero);
+        if (game.PendingChoice != null)
         {
-            game.LastMessage +=
-                $" Immediate roll {die1}+{die2}{(itemBonus > 0 ? $"+{itemBonus}" : "")}={totalWithItems} — need {def.HeroEffectMinRoll}+.";
+            game.LastMessage += " Make your choice to continue.";
+            return;
         }
+
+        game.LastMessage =
+            $"{game.LastMessage} Rolled {die1}+{die2}{bonusLabel}={total} — ability triggers!";
     }
 
     private void PlayItem(Game game, Player player, CardInstance card, string? targetHeroInstanceId)
@@ -367,16 +494,30 @@ public class GameService
     {
         player.Hand.Remove(card);
         game.DiscardPile.Add(card);
-        Effects.Apply(game, player, def, targetPlayerId);
+        _effects.Apply(game, player, def, targetPlayerId);
+        if (game.PendingChoice != null)
+            game.LastMessage += " Make your choice to continue.";
+        PartyLeaderAbilities.OnMagicCardPlayed(game, player, n => DrawCards(game, player, n));
         game.LastMessage = $"Cast {def.Name}.";
     }
 
     private void ResolveChallengeBeforePlay(Game game, Player target, Action continuePlay)
     {
+        if (target.HeroTurnBuffs.CardsCannotBeChallenged)
+        {
+            target.ChallengedByPlayerId = null;
+            target.ActiveChallengeCardInstanceId = null;
+            continuePlay();
+            return;
+        }
+
         var challengerId = target.ChallengedByPlayerId!;
         var challenger = RequirePlayer(game, challengerId);
 
-        var (c1, c2, cTotal) = RollDice(game, 0);
+        var challengeBonus = PartyLeaderAbilities.ChallengeRollBonus(challenger);
+        var (c1, c2, cNatural) = RollDiceNatural();
+        var cTotal = cNatural + challengeBonus;
+        SetRollDisplay(game, c1, c2, challengeBonus, cTotal);
         var (t1, t2, tTotal) = RollDice(game, 0);
 
         target.ChallengedByPlayerId = null;
@@ -543,10 +684,18 @@ public class GameService
         game.LastRollTotal = total;
     }
 
+    private static string FormatRollBonuses(int modifier, int itemBonus, int leaderBonus)
+    {
+        var extra = modifier + itemBonus + leaderBonus;
+        return extra > 0 ? $"+{extra}" : extra < 0 ? extra.ToString() : "";
+    }
+
     private void BeginTurn(Game game)
     {
         var player = CurrentPlayer(game);
         player.HeroesRolledThisTurn.Clear();
+        PartyLeaderAbilities.ResetTurnState(player);
+        player.HeroTurnBuffs = new HeroTurnBuffs();
         game.ActionPointsRemaining = GameRules.ActionPointsPerTurn;
         game.LastRollDie1 = null;
         game.LastRollDie2 = null;
@@ -627,6 +776,8 @@ public class GameService
     {
         if (game.State != GameState.InProgress)
             throw new InvalidOperationException("Game is not in progress.");
+
+        PendingChoiceService.EnsureNoPendingChoice(game, player.Id);
 
         if (CurrentPlayer(game).Id != player.Id)
             throw new InvalidOperationException("Not your turn.");

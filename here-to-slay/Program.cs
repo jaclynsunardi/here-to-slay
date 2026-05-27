@@ -113,7 +113,7 @@ app.MapPost("/game/{roomCode}/draw", (string roomCode, PlayerActionRequest reque
 app.MapPost("/game/{roomCode}/play", (string roomCode, PlayCardRequest request, Dictionary<string, Game> games, GameService gameService) =>
     HandleAction(roomCode, request.PlayerId, games, gameService, g =>
         gameService.PlayCard(g, request.PlayerId, request.CardInstanceId, request.TargetHeroInstanceId,
-            request.TargetPlayerId, request.RollHeroOnPlay)));
+            request.TargetPlayerId, request.ModifierCardInstanceId, request.RollHeroOnPlay)));
 
 app.MapPost("/game/{roomCode}/challenge", (string roomCode, PlayCardRequest request, Dictionary<string, Game> games, GameService gameService) =>
     HandleAction(roomCode, request.PlayerId, games, gameService, g =>
@@ -136,6 +136,10 @@ app.MapPost("/game/{roomCode}/discard-hand", (string roomCode, PlayerActionReque
 
 app.MapPost("/game/{roomCode}/end-turn", (string roomCode, PlayerActionRequest request, Dictionary<string, Game> games, GameService gameService) =>
     HandleAction(roomCode, request.PlayerId, games, gameService, g => gameService.EndTurn(g, request.PlayerId)));
+
+app.MapPost("/game/{roomCode}/resolve-choice", (string roomCode, ResolveChoiceRequest request, Dictionary<string, Game> games, GameService gameService) =>
+    HandleAction(roomCode, request.PlayerId, games, gameService, g =>
+        gameService.ResolvePendingChoice(g, request.PlayerId, request.SelectedCardInstanceIds, request.SelectedOption)));
 
 app.Run();
 

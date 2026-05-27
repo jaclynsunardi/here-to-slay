@@ -43,11 +43,12 @@ const EXAMPLE = {
 
 const INSTRUCTIONS = [
   "Copy the shape of `example` for each card in `cards`.",
-  "Leave effectText as \"\" until you add rules text.",
+  "effectText: full rules text (source of truth for in-game resolution).",
   "heroClass: Bard | Ranger | Thief | Wizard | Guardian | Fighter",
   "heroEffect: None | Draw1 | Draw2 | OpponentDiscard1 | StealRandomFromHand | DestroyOpponentHero | SacrificeOwnHeroDraw2 | SearchDeckDrawHero | AllPlayersDiscard1",
   "magicEffect: None | Draw2 | Draw3Discard2 | DestroyOpponentHero | StealOpponentHero | AllDraw1 | ReviveFromDiscard",
-  "Monsters: set partyReq1Class to Any if any class counts; leave partyReq2* blank or delete those keys.",
+  "itemKind: Equipment | Cursed",
+  "After editing effectText, run: node tools/categorize-base-deck-cards.mjs",
 ].join("\n");
 
 function parsePrefix(filename) {

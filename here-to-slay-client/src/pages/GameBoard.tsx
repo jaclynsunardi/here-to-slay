@@ -7,12 +7,14 @@ import {
   endTurn,
   playCard,
   playChallenge,
+  resolveChoice,
   rollHero,
   startGame,
 } from "../api";
 import { AP } from "../types/game";
 import DiceDisplay from "../components/DiceDisplay";
 import GameCard from "../components/GameCard";
+import PendingChoicePanel from "../components/PendingChoicePanel";
 import PageLayout from "../components/PageLayout";
 import { useGamePolling } from "../hooks/useGamePolling";
 import type { CardView, SessionInfo } from "../types/game";
@@ -41,7 +43,7 @@ export default function GameBoard() {
   const [selectedMonster, setSelectedMonster] = useState<string | null>(null);
   const [selectedModifier, setSelectedModifier] = useState<string | null>(null);
   const [challengeTargetId, setChallengeTargetId] = useState<string | null>(null);
-  const [rollOnPlay, setRollOnPlay] = useState(false);
+  const [heroPlayTargetId, setHeroPlayTargetId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -63,7 +65,12 @@ export default function GameBoard() {
   const uniqueClasses = useMemo(() => (me ? countClasses(me) : 0), [me]);
 
   const selectedCardData = me?.hand.find((c) => c.instanceId === selectedCard);
+  const heroNeedsTarget =
+    selectedCardData?.type === "Hero" &&
+    /choose a player/i.test(selectedCardData.effectText) &&
+    opponents.length > 0;
   const canAfford = (cost: number) => isMyTurn && ap >= cost;
+  const awaitingMyChoice = game?.pendingChoice?.isYourChoice ?? false;
 
   if (!session || !playerId) {
     return (
@@ -89,6 +96,7 @@ export default function GameBoard() {
       setSelectedMonster(null);
       setSelectedModifier(null);
       setChallengeTargetId(null);
+      setHeroPlayTargetId(null);
     } catch (e) {
       setActionError(e instanceof Error ? e.message : "Action failed");
     } finally {
@@ -168,6 +176,22 @@ export default function GameBoard() {
         </div>
       </header>
 
+      {game.pendingChoice && (
+        <PendingChoicePanel
+          choice={game.pendingChoice}
+          busy={busy}
+          onConfirm={(selectedCardInstanceIds, selectedOption) =>
+            runAction(() =>
+              resolveChoice(roomCode!, {
+                playerId: playerId!,
+                selectedCardInstanceIds,
+                selectedOption,
+              })
+            )
+          }
+        />
+      )}
+
       {game.state === "finished" && (
         <div className="win-overlay">
           <div className="win-overlay__card">
@@ -180,75 +204,79 @@ export default function GameBoard() {
         </div>
       )}
 
-      {opponents.map((opp) => (
-        <section key={opp.id} className="game-board__opponent zone-panel">
-          <div className="zone-panel__title">
-            <h3>{opp.name}</h3>
-            <span>{opp.handCount} cards</span>
-          </div>
-          {opp.partyLeader && (
+      <div className="game-board__viewport">
+        {opponents.map((opp) => (
+          <section key={opp.id} className="game-board__opponent zone-panel">
+            <div className="zone-panel__title">
+              <h3>{opp.name}</h3>
+              <span>{opp.handCount} cards</span>
+            </div>
+            {opp.partyLeader && (
+              <div className="zone-panel__row">
+                <div className="zone-label">Leader</div>
+                <div className="card-row">
+                  <GameCard card={opp.partyLeader} small />
+                </div>
+                <p className="party-leader-ability">{opp.partyLeader.effectText}</p>
+              </div>
+            )}
             <div className="zone-panel__row">
-              <div className="zone-label">Leader</div>
+              <div className="zone-label">Party</div>
               <div className="card-row">
-                <GameCard card={opp.partyLeader} small />
+                {opp.party.map((c) => (
+                  <GameCard key={c.instanceId} card={c} small />
+                ))}
               </div>
             </div>
-          )}
-          <div className="zone-panel__row">
-            <div className="zone-label">Party</div>
-            <div className="card-row">
-              {opp.party.map((c) => (
-                <GameCard key={c.instanceId} card={c} small />
+          </section>
+        ))}
+
+        <section className="game-board__center">
+          <div className="message-banner">
+            <p>{game.lastMessage}</p>
+            <DiceDisplay
+              die1={game.lastRollDie1}
+              die2={game.lastRollDie2}
+              modifier={game.lastRollModifier}
+              total={game.lastRollTotal}
+            />
+          </div>
+          <div className="monster-lane">
+            <h3>Monster Row — Attack costs 2 AP</h3>
+            <div className="monster-lane__cards">
+              {game.monsterRow.map((monster) => (
+                <div key={monster.instanceId} className="monster-wrap">
+                  <GameCard
+                    card={monster}
+                    selected={selectedMonster === monster.instanceId}
+                    disabled={!canAfford(AP.attack)}
+                    onClick={() =>
+                      setSelectedMonster((p) =>
+                        p === monster.instanceId ? null : monster.instanceId
+                      )
+                    }
+                  />
+                  <p className="monster-wrap__req">
+                    {monster.partyRequirements
+                      .map((r) =>
+                        r.genericHero
+                          ? `${r.count}× Hero`
+                          : `${r.count}× ${r.heroClass}`
+                      )
+                      .join(", ") || "No party req."}
+                    {monster.rollThreshold > 0 && <> · Slay {monster.rollThreshold}+</>}
+                    {monster.failIfRollAtOrBelow != null && (
+                      <> · ≤{monster.failIfRollAtOrBelow}: {monster.failPenalty ?? "penalty"}</>
+                    )}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
         </section>
-      ))}
+      </div>
 
-      <section className="game-board__center">
-        <div className="message-banner">
-          <p>{game.lastMessage}</p>
-          <DiceDisplay
-            die1={game.lastRollDie1}
-            die2={game.lastRollDie2}
-            modifier={game.lastRollModifier}
-            total={game.lastRollTotal}
-          />
-        </div>
-        <div className="monster-lane">
-          <h3>Monster Row — Attack costs 2 AP</h3>
-          <div className="monster-lane__cards">
-            {game.monsterRow.map((monster) => (
-              <div key={monster.instanceId} className="monster-wrap">
-                <GameCard
-                  card={monster}
-                  selected={selectedMonster === monster.instanceId}
-                  disabled={!canAfford(AP.attack)}
-                  onClick={() =>
-                    setSelectedMonster((p) =>
-                      p === monster.instanceId ? null : monster.instanceId
-                    )
-                  }
-                />
-                <p className="monster-wrap__req">
-                  {monster.partyRequirements
-                    .map((r) =>
-                      r.genericHero
-                        ? `${r.count}× Hero`
-                        : `${r.count}× ${r.heroClass}`
-                    )
-                    .join(", ") || "No party req."}
-                  {monster.rollThreshold > 0 && <> · Slay {monster.rollThreshold}+</>}
-                  {monster.failIfRollAtOrBelow != null && (
-                    <> · ≤{monster.failIfRollAtOrBelow}: {monster.failPenalty ?? "penalty"}</>
-                  )}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
+      <div className="game-board__bottom">
       <section className="game-board__player zone-panel">
         <div className="zone-panel__title">
           <h3>{me?.name}</h3>
@@ -259,6 +287,7 @@ export default function GameBoard() {
             <div className="card-row">
               <GameCard card={me.partyLeader} small />
             </div>
+            <p className="party-leader-ability">{me.partyLeader.effectText}</p>
           </div>
         )}
         <div className="zone-panel__row">
@@ -272,7 +301,8 @@ export default function GameBoard() {
                 selected={selectedHero === hero.instanceId}
                 disabled={
                   !canAfford(AP.heroRoll) ||
-                  me.heroesRolledThisTurn.includes(hero.instanceId)
+                  me.heroesRolledThisTurn.includes(hero.instanceId) ||
+                  awaitingMyChoice
                 }
                 onClick={() =>
                   setSelectedHero((p) => (p === hero.instanceId ? null : hero.instanceId))
@@ -281,8 +311,9 @@ export default function GameBoard() {
             ))}
           </div>
         </div>
+      </section>
 
-        <div className="hand-zone">
+        <div className="hand-zone zone-panel">
           <h3>Hand — Modifiers apply to your next roll</h3>
           <div className="hand-zone__cards">
             {me?.hand.map((card) => (
@@ -292,7 +323,7 @@ export default function GameBoard() {
                 selected={
                   selectedCard === card.instanceId || selectedModifier === card.instanceId
                 }
-                disabled={!isMyTurn}
+                disabled={!isMyTurn || awaitingMyChoice}
                 onClick={() => {
                   if (card.type === "Modifier") {
                     setSelectedModifier((p) =>
@@ -347,16 +378,29 @@ export default function GameBoard() {
         )}
 
         {selectedCardData?.type === "Hero" && (
-          <label className="roll-on-play">
-            <input
-              type="checkbox"
-              checked={rollOnPlay}
-              onChange={(e) => setRollOnPlay(e.target.checked)}
-            />
-            Roll hero ability immediately on play (free roll)
-          </label>
+          <p className="card-hint">
+            Playing a hero adds them to your party and automatically rolls for their ability.
+          </p>
         )}
-      </section>
+
+        {selectedCardData?.type === "Hero" &&
+          /choose a player/i.test(selectedCardData.effectText) &&
+          opponents.length > 0 && (
+          <div className="target-row">
+            <span>Target player:</span>
+            {opponents.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                className={`btn btn-ghost ${heroPlayTargetId === o.id ? "btn--active" : ""}`}
+                onClick={() => setHeroPlayTargetId(o.id)}
+              >
+                {o.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       <footer className="game-board__actions">
         {actionError && <p className="action-error">{actionError}</p>}
@@ -364,7 +408,7 @@ export default function GameBoard() {
           <button
             type="button"
             className="btn btn-primary"
-            disabled={!canAfford(AP.draw) || busy}
+            disabled={!canAfford(AP.draw) || busy || awaitingMyChoice}
             onClick={() => runAction(() => drawCard(roomCode!, playerId))}
           >
             Draw (1 AP)
@@ -377,8 +421,10 @@ export default function GameBoard() {
               !selectedCardData ||
               selectedCardData.type === "Modifier" ||
               selectedCardData.type === "Challenge" ||
+              (heroNeedsTarget && !heroPlayTargetId) ||
               !canAfford(AP.play) ||
-              busy
+              busy ||
+              awaitingMyChoice
             }
             onClick={() =>
               runAction(() =>
@@ -386,8 +432,8 @@ export default function GameBoard() {
                   playerId,
                   cardInstanceId: selectedCard!,
                   targetHeroInstanceId: selectedHero ?? undefined,
+                  targetPlayerId: heroPlayTargetId ?? challengeTargetId ?? undefined,
                   modifierCardInstanceId: selectedModifier ?? undefined,
-                  rollHeroOnPlay: rollOnPlay,
                 })
               )
             }
@@ -402,7 +448,8 @@ export default function GameBoard() {
               selectedCardData?.type !== "Challenge" ||
               !challengeTargetId ||
               !canAfford(AP.play) ||
-              busy
+              busy ||
+              awaitingMyChoice
             }
             onClick={() =>
               runAction(() =>
@@ -415,10 +462,15 @@ export default function GameBoard() {
           <button
             type="button"
             className="btn btn-secondary"
-            disabled={!selectedHero || !canAfford(AP.heroRoll) || busy}
+            disabled={!selectedHero || !canAfford(AP.heroRoll) || busy || awaitingMyChoice}
             onClick={() =>
               runAction(() =>
-                rollHero(roomCode!, playerId, selectedHero!, selectedModifier ?? undefined)
+                rollHero(
+                  roomCode!,
+                  playerId,
+                  selectedHero!,
+                  selectedModifier ?? undefined
+                )
               )
             }
           >
@@ -427,7 +479,7 @@ export default function GameBoard() {
           <button
             type="button"
             className="btn btn-accent"
-            disabled={!selectedMonster || !canAfford(AP.attack) || busy}
+            disabled={!selectedMonster || !canAfford(AP.attack) || busy || awaitingMyChoice}
             onClick={() =>
               runAction(() =>
                 attackMonster(
@@ -444,7 +496,7 @@ export default function GameBoard() {
           <button
             type="button"
             className="btn btn-secondary"
-            disabled={!canAfford(AP.discardRedraw) || busy}
+            disabled={!canAfford(AP.discardRedraw) || busy || awaitingMyChoice}
             onClick={() => runAction(() => discardHandRedraw(roomCode!, playerId))}
           >
             Discard Hand (3 AP)
@@ -452,7 +504,7 @@ export default function GameBoard() {
           <button
             type="button"
             className="btn btn-ghost"
-            disabled={!isMyTurn || busy}
+            disabled={!isMyTurn || busy || awaitingMyChoice}
             onClick={() => runAction(() => endTurn(roomCode!, playerId))}
           >
             End Turn

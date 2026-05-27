@@ -20,6 +20,9 @@ export interface CardView {
   partyRequirements: PartyRequirement[];
   attachedItems: CardView[];
   isPartyLeader: boolean;
+  partyLeaderAbility: string | null;
+  partyLeaderAbilityValue: number | null;
+  partyLeaderAbilityAltValue: number | null;
 }
 
 export interface PlayerView {
@@ -32,6 +35,16 @@ export interface PlayerView {
   slainMonsters: CardView[];
   handCount: number;
   heroesRolledThisTurn: string[];
+}
+
+export interface PendingChoiceView {
+  kind: string;
+  prompt: string;
+  minSelections: number;
+  maxSelections: number;
+  selectableCards: CardView[];
+  options: string[];
+  isYourChoice: boolean;
 }
 
 export interface GameView {
@@ -54,6 +67,7 @@ export interface GameView {
   monsterRow: CardView[];
   players: PlayerView[];
   viewingPlayerId: string;
+  pendingChoice: PendingChoiceView | null;
 }
 
 export interface SessionInfo {

@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using HereToSlay.Models;
 
 namespace HereToSlay.Services;
@@ -46,13 +47,9 @@ public static class CardCatalogLoader
 
         var effectScript = type switch
         {
-            CardType.Hero or CardType.PartyLeader => raw.HeroEffect ?? "",
-            CardType.Magic => raw.MagicEffect ?? raw.EffectText ?? "",
+            CardType.Hero or CardType.PartyLeader or CardType.Magic => StripRollPrefix(raw.EffectText),
             _ => ""
         };
-
-        if (string.IsNullOrWhiteSpace(effectScript) && type is CardType.Hero or CardType.Magic)
-            effectScript = raw.EffectText ?? "";
 
         var (modBonus, modAlt) = ParseModifierBonus(raw.ModifierBonus);
         modAlt ??= raw.ModifierBonusAlt;
@@ -63,6 +60,12 @@ public static class CardCatalogLoader
             Name = raw.Name,
             Type = type,
             HeroClass = heroClass,
+            HeroEffect = ParseHeroEffect(raw.HeroEffect),
+            MagicEffect = ParseMagicEffect(raw.MagicEffect),
+            ItemKind = ParseItemKind(raw.ItemKind),
+            PartyLeaderAbility = ParsePartyLeaderAbility(raw.PartyLeaderAbility),
+            PartyLeaderAbilityValue = raw.PartyLeaderAbilityValue ?? 0,
+            PartyLeaderAbilityAltValue = raw.PartyLeaderAbilityAltValue,
             HeroEffectMinRoll = raw.HeroEffectMinRoll ?? 6,
             EffectText = raw.EffectText ?? "",
             EffectScript = effectScript.Trim(),
@@ -190,6 +193,32 @@ public static class CardCatalogLoader
         return int.Parse(s, System.Globalization.CultureInfo.InvariantCulture);
     }
 
+    private static string StripRollPrefix(string? effectText)
+    {
+        if (string.IsNullOrWhiteSpace(effectText))
+            return "";
+
+        return RollPrefixRegex.Replace(effectText.Trim(), "").Trim();
+    }
+
+    private static readonly Regex RollPrefixRegex = new(
+        @"^Roll\s+\d+\+?:\s*",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+    private static HeroEffect ParseHeroEffect(string? value) =>
+        Enum.TryParse<HeroEffect>(value?.Trim(), true, out var effect) ? effect : HeroEffect.None;
+
+    private static MagicEffect ParseMagicEffect(string? value) =>
+        Enum.TryParse<MagicEffect>(value?.Trim(), true, out var effect) ? effect : MagicEffect.None;
+
+    private static ItemKind? ParseItemKind(string? value) =>
+        Enum.TryParse<ItemKind>(value?.Trim(), true, out var kind) ? kind : null;
+
+    private static PartyLeaderAbilityKind ParsePartyLeaderAbility(string? value) =>
+        Enum.TryParse<PartyLeaderAbilityKind>(value?.Trim(), true, out var kind)
+            ? kind
+            : PartyLeaderAbilityKind.None;
+
     private sealed class CardDataFile
     {
         public List<RawCard> Cards { get; set; } = [];
@@ -204,6 +233,10 @@ public static class CardCatalogLoader
         public string? HeroEffect { get; set; }
         public int? HeroEffectMinRoll { get; set; }
         public string? MagicEffect { get; set; }
+        public string? ItemKind { get; set; }
+        public string? PartyLeaderAbility { get; set; }
+        public int? PartyLeaderAbilityValue { get; set; }
+        public int? PartyLeaderAbilityAltValue { get; set; }
         public JsonNode? ModifierBonus { get; set; }
         public int? ModifierBonusAlt { get; set; }
         public int? Copies { get; set; }

@@ -22,6 +22,11 @@ public record AttackMonsterRequest(
     string MonsterInstanceId,
     string? ModifierCardInstanceId = null);
 
+public record ResolveChoiceRequest(
+    string PlayerId,
+    IReadOnlyList<string> SelectedCardInstanceIds,
+    string? SelectedOption = null);
+
 public record PartyRequirementDto(string? HeroClass, int Count, bool GenericHero = false);
 
 public record CardViewDto(
@@ -37,7 +42,10 @@ public record CardViewDto(
     string EffectText,
     IReadOnlyList<PartyRequirementDto> PartyRequirements,
     IReadOnlyList<CardViewDto> AttachedItems,
-    bool IsPartyLeader);
+    bool IsPartyLeader,
+    string? PartyLeaderAbility = null,
+    int? PartyLeaderAbilityValue = null,
+    int? PartyLeaderAbilityAltValue = null);
 
 public record PlayerViewDto(
     string Id,
@@ -49,6 +57,15 @@ public record PlayerViewDto(
     IReadOnlyList<CardViewDto> SlainMonsters,
     int HandCount,
     IReadOnlyList<string> HeroesRolledThisTurn);
+
+public record PendingChoiceViewDto(
+    string Kind,
+    string Prompt,
+    int MinSelections,
+    int MaxSelections,
+    IReadOnlyList<CardViewDto> SelectableCards,
+    IReadOnlyList<string> Options,
+    bool IsYourChoice);
 
 public record GameViewDto(
     string RoomCode,
@@ -69,4 +86,5 @@ public record GameViewDto(
     int DiscardCount,
     IReadOnlyList<CardViewDto> MonsterRow,
     IReadOnlyList<PlayerViewDto> Players,
-    string ViewingPlayerId);
+    string ViewingPlayerId,
+    PendingChoiceViewDto? PendingChoice = null);

@@ -124,6 +124,17 @@ export async function endTurn(roomCode: string, playerId: string) {
   return postAction(roomCode, "end-turn", { playerId });
 }
 
+export async function resolveChoice(
+  roomCode: string,
+  body: {
+    playerId: string;
+    selectedCardInstanceIds: string[];
+    selectedOption?: string;
+  }
+) {
+  return postAction(roomCode, "resolve-choice", body);
+}
+
 async function postAction(roomCode: string, action: string, body: object) {
   return parseJson<GameView>(
     await fetch(`${BACKEND_URL}/game/${encodeURIComponent(roomCode)}/${action}`, {
